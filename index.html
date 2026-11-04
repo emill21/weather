@@ -52,20 +52,20 @@ async function refreshSatellite(manual=false){
     const response=await fetch('./satellite.json?refresh='+Date.now(),{cache:'no-store'});
     if(!response.ok)throw Error('Satellite metadata unavailable: HTTP '+response.status);
     const info=await response.json();
-    if(!info.date)throw Error(info.error||'No recent satellite snapshot available');
+    if(!info.date && !info.mosaic)throw Error(info.error||'No satellite snapshot available');
     const texture=await new Promise((resolve,reject)=>{
-      loader.load('./satellite.jpg?date='+encodeURIComponent(info.date)+'&refresh='+(manual?Date.now():'latest'),resolve,undefined,reject);
+      loader.load('./satellite.jpg?version='+encodeURIComponent(info.updated||info.date||Date.now()),resolve,undefined,reject);
     });
     if(generation!==satelliteGeneration){texture.dispose();return}
     texture.colorSpace=THREE.SRGBColorSpace;
     texture.anisotropy=Math.min(renderer.capabilities.getMaxAnisotropy(),8);
     const old=satelliteTexture;
     satelliteTexture=texture;
-    satelliteDate=info.date;
+    satelliteDate=info.date||'baseline';
     earthMat.map=texture;earthMat.needsUpdate=true;
     if(old)old.dispose();
-    const label=new Date(info.date+'T12:00:00Z').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});
-    setSatelliteStatus('NASA satellite · '+label,'True-color imagery refreshed by GitHub automatically twice per day. Clouds may obscure ground and snow.');
+    const label=info.date?new Date(info.date+'T12:00:00Z').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'}):'archived global basemap';
+    setSatelliteStatus('NASA satellite mosaic · '+label,info.mosaic?'Recent passes from multiple days cover '+(info.recentCoveragePercent??'some')+'% of the globe; older base imagery fills gaps. Updates twice daily.':'Daily true-color imagery; clouds can obscure snow.');
     if(manual)showNotice('Satellite image loaded: '+label);
   }catch(e){
     console.warn('Satellite imagery failed:',e);
