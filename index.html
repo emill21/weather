@@ -104,11 +104,11 @@ async function setMode(mode){
       const response=await fetch('./satellite.json?t='+Date.now(),{cache:'no-store'});
       if(!response.ok)throw Error('NASA metadata not available');
       satelliteMeta=await response.json();
-      provider=new C.SingleTileImageryProvider({
-        url:'./satellite.jpg?version='+encodeURIComponent(satelliteMeta.updated||Date.now()),
-        rectangle:C.Rectangle.fromDegrees(-180,-90,180,90),
-        credit:'NASA GIBS (recent observations); older imagery fills satellite gaps'
-      });
+      provider=await C.SingleTileImageryProvider.fromUrl(
+        './satellite.jpg?version='+encodeURIComponent(satelliteMeta.updated||Date.now()),
+        {rectangle:C.Rectangle.fromDegrees(-180,-90,180,90),
+        credit:'NASA GIBS (recent observations); older imagery fills satellite gaps'}
+      );
       $('mapInfo').textContent='NASA image: '+(satelliteMeta.date||'archived')+' · Coverage: '+(satelliteMeta.recentCoveragePercent??'unknown')+'% recent; remaining uses older basemap.';
     }else{
       provider=new C.UrlTemplateImageryProvider({
