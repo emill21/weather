@@ -4,7 +4,6 @@ on:
   push:
     branches: [main]
   schedule:
-    # Rebuild satellite snapshot twice daily (UTC)
     - cron: '20 6,18 * * *'
   workflow_dispatch:
 
@@ -24,50 +23,90 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Fetch recent true-color NASA satellite image
+      - uses: actions/checkout@v4
+      - name: Install image compositor
+        run: python3 -m pip install --quiet --break-system-packages Pillow
+      - name: Build full-world satellite mosaic
         shell: bash
         run: |
           python3 - <<'PY'
-          import datetime, urllib.parse, urllib.request, pathlib, json, time
-          base = 'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi'
-          today = datetime.datetime.now(datetime.timezone.utc).date()
-          layer = 'VIIRS_SNPP_CorrectedReflectance_TrueColor'
-          for ago in [1, 2, 3, 4, 5, 6, 7]:
-              date = str(today - datetime.timedelta(days=ago))
+          import datetime, json, pathlib, time, urllib.parse, urllib.request
+          from io import BytesIO
+          from PIL import Image, ImageChops, ImageStat
+
+          ROOT = 'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi'
+          SIZE = (2048, 1024)
+          TODAY = datetime.datetime.now(datetime.timezone.utc).date()
+          def download(layer, date=None, transparent=False):
               params = {
                   'SERVICE': 'WMS', 'VERSION': '1.1.1', 'REQUEST': 'GetMap',
-                  'LAYERS': layer, 'STYLES': '', 'FORMAT': 'image/jpeg',
+                  'LAYERS': layer, 'STYLES': '',
+                  'FORMAT': 'image/png' if transparent else 'image/jpeg',
+                  'TRANSPARENT': 'TRUE' if transparent else 'FALSE',
                   'SRS': 'EPSG:4326', 'BBOX': '-180,-90,180,90',
-                  'WIDTH': '2048', 'HEIGHT': '1024', 'TIME': date,
+                  'WIDTH': str(SIZE[0]), 'HEIGHT': str(SIZE[1])
               }
-              url = base + '?' + urllib.parse.urlencode(params)
-              for attempt in range(2):
-                  try:
-                      req = urllib.request.Request(url, headers={'User-Agent': 'Atmos-Weather-Globe/1.0'})
-                      with urllib.request.urlopen(req, timeout=65) as resp:
-                          data = resp.read()
-                      if not data.startswith(b'\xff\xd8\xff') or not data.endswith(b'\xff\xd9') or len(data) < 25000:
-                          raise ValueError('Invalid or too-small JPEG satellite image')
-                      pathlib.Path('satellite.jpg').write_bytes(data)
-                      pathlib.Path('satellite.json').write_text(json.dumps({
-                          'date': date, 'source': 'NASA GIBS', 'layer': layer,
-                          'updated': datetime.datetime.now(datetime.timezone.utc).isoformat()
-                      }))
-                      print(f'Satellite image ready: {date}, {len(data)} bytes')
-                      raise SystemExit(0)
-                  except Exception as e:
-                      print(f'{date} attempt {attempt+1} failed: {e}', flush=True)
-                      time.sleep(2)
-          # Preserve site access even if the provider is temporarily unavailable.
-          pathlib.Path('satellite.json').write_text(json.dumps({'error': 'NASA imagery unavailable', 'updated': datetime.datetime.now(datetime.timezone.utc).isoformat()}))
-          print('No valid satellite image; website will use its fallback texture')
+              if date: params['TIME'] = str(date)
+              url = ROOT + '?' + urllib.parse.urlencode(params)
+              req = urllib.request.Request(url, headers={'User-Agent': 'Atmos-Weather-Globe/1.0'})
+              with urllib.request.urlopen(req, timeout=45) as resp: data = resp.read()
+              im = Image.open(BytesIO(data))
+              im.load()
+              if im.size != SIZE: raise ValueError('Incorrect image dimensions')
+              return im.convert('RGBA'), len(data)
+
+          # NASA's full-world Blue Marble is an observed (but not current) fallback,
+          # preventing missing satellite swaths from appearing as black continents.
+          try:
+              background, size = download('BlueMarble_NextGeneration')
+              print('Loaded Blue Marble fallback', size, flush=True)
+          except Exception as exc:
+              print('Blue Marble unavailable:', exc, flush=True)
+              background = Image.new('RGBA', SIZE, (22, 64, 107, 255))
+
+          mosaic = background.copy()
+          dates = []
+          coverage = Image.new('L', SIZE, 0)
+          # Oldest-to-newest composition ensures fresher observations take priority.
+          for offset in [7,6,5,4,3,2,1]:
+              date = str(TODAY - datetime.timedelta(days=offset))
+              try:
+                  layer, size = download('VIIRS_SNPP_CorrectedReflectance_TrueColor', date, True)
+                  alpha = layer.getchannel('A')
+                  # WMS can use nearly-black "no data" pixels as well as alpha gaps.
+                  rgb = layer.convert('RGB')
+                  no_data = rgb.point(lambda p: 255 if p < 4 else 0).convert('L')
+                  # A pixel is missing only if all 3 channels are nearly black.
+                  channels = rgb.split()
+                  nearly_black = ImageChops.multiply(ImageChops.multiply(
+                      channels[0].point(lambda p: 255 if p < 4 else 0),
+                      channels[1].point(lambda p: 255 if p < 4 else 0)),
+                      channels[2].point(lambda p: 255 if p < 4 else 0))
+                  alpha = ImageChops.subtract(alpha, nearly_black)
+                  layer.putalpha(alpha)
+                  mosaic.alpha_composite(layer)
+                  coverage = ImageChops.lighter(coverage, alpha)
+                  dates.append(date)
+                  print('Composited', date, size, 'bytes', flush=True)
+              except Exception as exc:
+                  print('Skipping', date, str(exc), flush=True)
+
+          if not dates:
+              print('No recent satellite imagery; publishing fallback only', flush=True)
+
+          mosaic.convert('RGB').save('satellite.jpg', 'JPEG', quality=90, optimize=True)
+          coverage_percent = round(ImageStat.Stat(coverage).mean[0] / 255 * 100, 1)
+          pathlib.Path('satellite.json').write_text(json.dumps({
+              'date': max(dates) if dates else None,
+              'dates': dates, 'source': 'NASA GIBS',
+              'mosaic': True, 'recentCoveragePercent': coverage_percent,
+              'baseLayer': 'BlueMarble_NextGeneration',
+              'updated': datetime.datetime.now(datetime.timezone.utc).isoformat()
+          }))
+          print('Finished global mosaic: recent coverage', coverage_percent, '%', flush=True)
           PY
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-      - name: Upload website
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: .
       - name: Deploy to Pages
