@@ -36,6 +36,50 @@
 @media(max-width:1050px){.mapmode{position:fixed;left:12px;top:68px}.location-tag{top:126px;left:12px}.panel{width:320px;right:12px}.earth-tip{bottom:20px;left:12px}}
 @media(max-width:850px){.panel{top:auto;left:10px;right:10px;bottom:10px;width:auto;max-height:43vh}.location-tag{top:112px}.earth-tip{bottom:calc(43vh + 20px);left:10px}.topbar{top:12px}.mapmode{top:59px}.toolbar{top:34%}}
 @media(max-width:540px){.brand .tagline{display:none}.brand .logo{display:none}.brandname{font-size:18px}.topbar{gap:6px}.controls{gap:5px}.searchwrap{width:34vw}.mapmode{left:12px;top:57px}.location-tag{top:106px;font-size:10px;max-width:230px}.earth-tip{font-size:10px;max-width:240px}.modebtn{padding:9px}.mapbtn{padding:0 8px}}
+
+/* Atmos Ultra visual system */
+:root{--bg:#030914;--panel:rgba(7,18,34,.87);--line:rgba(119,195,255,.23)}
+body{background:#030914}
+.topbar{top:18px;left:20px;right:20px;gap:12px}
+.logo{background:linear-gradient(140deg,#8ff4ff,#1671d3 70%);box-shadow:0 0 32px #1eabff70}
+.brandname{font-weight:850;letter-spacing:-1.4px}.tagline{letter-spacing:2px}
+.panel{top:88px;bottom:92px;right:20px;width:365px;background:linear-gradient(145deg,rgba(10,29,49,.91),rgba(3,13,28,.87));border-color:#61b9ef35;box-shadow:0 25px 90px #0009,0 0 35px #0864ac10;border-radius:20px}
+.modebtn.active{background:linear-gradient(120deg,#2560af,#1aa0bc);box-shadow:0 0 16px #2cb7ff40}
+.iconbtn,.unitbtn,.mapbtn,.tool{transition:transform .18s ease,background .18s ease}
+.iconbtn:hover,.unitbtn:hover,.tool:hover{transform:translateY(-2px)}
+.earth-tip{bottom:100px;border-color:#4f96bf55}
+.location-tag{top:90px;left:20px;backdrop-filter:blur(15px);border-color:#71c8ed44}
+.atmos-dock{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);z-index:9;display:flex;align-items:center;gap:7px;padding:7px;border:1px solid #5aa3d17c;background:rgba(5,19,37,.88);border-radius:20px;backdrop-filter:blur(30px);box-shadow:0 10px 45px #000a,0 0 38px #138cf526}
+.dock-button{height:43px;border:1px solid transparent;background:transparent;color:#c0d8ed;border-radius:12px;padding:0 14px;cursor:pointer;font-size:12px;font-weight:720;white-space:nowrap}
+.dock-button:hover,.dock-button.active{background:#145077;color:#fff;border-color:#65d3ff50}
+.dock-button.primary{background:linear-gradient(120deg,#1867c9,#0d9dae);color:#fff}
+.dock-sep{width:1px;height:25px;background:#56829e65}
+.atmos-headline{position:fixed;z-index:3;left:23px;top:175px;pointer-events:none;letter-spacing:3px;color:#8ccbe9aa;font-size:10px;font-weight:800}
+.atmos-headline b{display:block;color:#ecfaff;font-weight:900;letter-spacing:-2.3px;font-size:clamp(29px,4vw,58px);line-height:1.1;text-shadow:0 3px 35px #000c}
+.atmos-headline span{letter-spacing:.15em;color:#80bcd2}
+.system-data{position:fixed;z-index:4;left:23px;bottom:205px;color:#b6d7e9;font-size:11px;line-height:1.9;pointer-events:none}
+.system-data strong{color:#e2f9ff;font-variant-numeric:tabular-nums}
+.system-data .sys-label{color:#84a7c2;letter-spacing:1.4px;font-size:9px}
+.side-flyout{position:fixed;z-index:10;bottom:84px;left:50%;width:min(500px,calc(100vw - 26px));transform:translateX(-50%);display:none;padding:18px;border-radius:19px;border:1px solid #59bcf878;background:rgba(7,21,37,.96);box-shadow:0 20px 80px #000d;max-height:55vh;overflow-y:auto;backdrop-filter:blur(30px)}
+.side-flyout.open{display:block}
+.fly-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;font-size:14px;font-weight:800}
+.fly-title button{background:#244058;border:1px solid #6488a4;color:white;border-radius:9px;padding:6px 10px;cursor:pointer}
+.saved-item{display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid #ffffff16;background:#ffffff06;border-radius:12px;padding:10px;margin-top:7px}
+.saved-item button{border:0;background:#1c455f;color:white;padding:8px 10px;border-radius:8px;cursor:pointer}
+.saved-item button:hover{background:#27759a}
+.saved-item .saved-name{min-width:0;flex:1}
+.saved-item .saved-name strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+.saved-item .saved-name small{color:#92b2c9;font-size:10px}
+.save-location{background:#123954;border:1px solid #4b8db7;color:#b9e5ff;border-radius:11px;padding:9px 12px;margin-top:13px;font-size:12px;cursor:pointer;width:100%}
+.hourly-strip{display:flex;overflow-x:auto;gap:7px;margin-top:12px;padding-bottom:8px;scrollbar-width:thin}
+.hour-chip{flex:0 0 64px;padding:10px 7px;background:#ffffff09;border:1px solid #ffffff12;border-radius:11px;text-align:center;font-size:11px}
+.hour-chip .hour-icon{font-size:21px;margin:8px 0}.hour-chip .hour-temp{font-size:13px;font-weight:800}
+.weather-summary{margin-top:12px;color:#b1d3e8;font-size:11px;line-height:1.6}
+.atmos-pulse{width:6px;height:6px;border-radius:50%;display:inline-block;background:#66efc7;box-shadow:0 0 0 4px #66efc721,0 0 12px #66efc7;margin-right:6px}
+kbd{font:inherit;color:#8fc5e9;background:#1a3146;padding:1px 6px;border-radius:4px}
+@media(max-width:850px){.panel{right:10px;left:10px;bottom:80px;max-height:41vh;width:auto}.atmos-headline{top:148px;left:12px}.atmos-headline b{font-size:30px}.system-data{display:none}.earth-tip{bottom:calc(41vh + 102px);font-size:10px;max-width:210px}.atmos-dock{bottom:10px;max-width:calc(100vw - 12px);overflow-x:auto;border-radius:14px}.dock-button{padding:0 10px;height:37px;font-size:11px}.side-flyout{bottom:63px;max-height:48vh}.location-tag{top:115px}}
+@media(max-width:540px){.atmos-headline{top:156px}.atmos-headline b{font-size:24px}.atmos-headline span{font-size:9px}.panel{max-height:38vh}.earth-tip{display:none}.toolbar{top:33%;left:7px}.location-tag{display:none}.mapmode{top:58px}.topbar{left:9px;right:9px}.atmos-dock{width:calc(100vw - 14px);justify-content:space-between;gap:2px}.dock-button{padding:0 7px;font-size:10px}.dock-sep{display:none}}
+
 </style>
 </head>
 <body>
@@ -52,6 +96,23 @@
 <div class="toolbar"><button class="tool" id="zoomIn" aria-label="Zoom in" title="Zoom in">+</button><button class="tool" id="zoomOut" aria-label="Zoom out" title="Zoom out">−</button><button class="tool" id="spin" aria-label="Toggle slow spin" title="Toggle slow spin">◎</button></div>
 <aside class="panel" id="panel"><div class="eyebrow"><span class="pulse"></span> WORLD WEATHER</div><h1 class="place" id="place">Explore Earth</h1><p class="subplace" id="region">Click a location on the 3D globe to view its weather</p><div id="weather"><div class="loading">Search or select a location to view live conditions and a 7-day forecast.</div></div></aside>
 <div class="earth-tip">Drag to rotate · Scroll to zoom · Click to select<small>Satellite and road maps are detailed reference imagery, not live photos. The optional NASA layer shows recent observations, which may include cloud cover.</small></div>
+
+<div class="atmos-headline">ATMOS / PLANETARY INTELLIGENCE<b>THE WHOLE<br>WORLD, LIVE.</b><span>EXPLORE · OBSERVE · DISCOVER</span></div>
+<div class="system-data"><div class="sys-label">MISSION TELEMETRY</div><div>ALTITUDE <strong id="altReadout">—</strong></div><div>VIEW CENTER <strong id="coordsReadout">—</strong></div><div>UTC <strong id="clockReadout">—</strong></div><div><span class="atmos-pulse"></span> <strong id="weatherLayerStatus">Globe online</strong></div></div>
+<div class="atmos-dock" aria-label="Explore Atmos">
+<button class="dock-button primary" id="tourBtn">✦ World tour</button>
+<div class="dock-sep"></div>
+<button class="dock-button" id="hotspotsBtn">🌡 City temperatures</button>
+<button class="dock-button" id="favoritesBtn">☆ Saved places</button>
+<button class="dock-button" id="saveBtn">＋ Save location</button>
+<button class="dock-button" id="shareBtn">↗ Share</button>
+<button class="dock-button" id="focusBtn">⛶ Focus</button>
+</div>
+<section class="side-flyout" id="favoritesFlyout" aria-label="Saved places">
+  <div class="fly-title"><span>☆ YOUR SAVED PLACES</span><button id="closeFlyout">Close ✕</button></div>
+  <div id="savedList"></div>
+  <div class="weather-summary">Saved locally in this browser. Choose a saved place to fly there and reload its weather.</div>
+</section>
 <div id="notice" class="notice"></div>
 <script>window.CESIUM_BASE_URL='https://cdn.jsdelivr.net/npm/cesium@1.130.1/Build/Cesium/';</script>
 <script src="https://cdn.jsdelivr.net/npm/cesium@1.130.1/Build/Cesium/Cesium.js"></script>
@@ -203,7 +264,7 @@ async function selectCoords(lat,lon,info=null,fly=false){
  $('region').textContent=info?.region||prettyCoords(lat,lon);
  $('weather').innerHTML='<div class="loading">Fetching weather for the selected location…</div>';
  const api=new URL('https://api.open-meteo.com/v1/forecast');
- api.search=new URLSearchParams({latitude:lat.toFixed(5),longitude:lon.toFixed(5),current:'temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,precipitation,cloud_cover,is_day',daily:'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max',timezone:'auto',forecast_days:'7'}).toString();
+ api.search=new URLSearchParams({latitude:lat.toFixed(5),longitude:lon.toFixed(5),current:'temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,precipitation,cloud_cover,is_day',daily:'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max',timezone:'auto',forecast_days:'7',hourly:'temperature_2m,weather_code,precipitation_probability',forecast_hours:'24'}).toString();
  const [weather,place]=await Promise.allSettled([
    fetch(api).then(r=>{if(!r.ok)throw Error('Forecast service unavailable');return r.json()}),
    info?Promise.resolve(info):lookupPlace(lat,lon)
@@ -221,6 +282,25 @@ function renderWeather(){
    return '<div class="day"><span>'+label+'</span><span class="dayicon">'+wd(day.weather_code[i])[1]+'</span><span class="daytemps">'+formatTemp(day.temperature_2m_max[i])+'<span>'+formatTemp(day.temperature_2m_min[i])+'</span></span></div>'
  }).join('');
  $('weather').innerHTML='<div class="current"><div class="temp">'+formatTemp(c.temperature_2m)+'</div><div class="weathericon">'+emoji+'</div></div><div class="condition">'+condition+'</div><div class="feels">Feels like '+formatTemp(c.apparent_temperature)+' · '+(c.is_day?'Daytime':'Nighttime')+'</div><div class="divider"></div><div class="label">Conditions right now</div><div class="metrics"><div class="metric"><div class="metriclabel">💨 Wind</div><div class="metricvalue">'+formatWind(c.wind_speed_10m)+'</div></div><div class="metric"><div class="metriclabel">💧 Humidity</div><div class="metricvalue">'+(c.relative_humidity_2m??'—')+'%</div></div><div class="metric"><div class="metriclabel">☁️ Clouds</div><div class="metricvalue">'+(c.cloud_cover??'—')+'%</div></div><div class="metric"><div class="metriclabel">🌧️ Rain</div><div class="metricvalue">'+(c.precipitation==null?'—':c.precipitation+' mm')+'</div></div></div><div class="divider"></div><div class="label">7-day forecast</div><div class="forecast">'+days+'</div><div class="coords">'+prettyCoords(selected.lat,selected.lon)+'</div>';
+
+ const hourly=d.hourly;
+ if(hourly&&hourly.time){
+  const root=document.createElement('div');
+  root.innerHTML='<div class="divider"></div><div class="label">Next 24 hours</div>';
+  const strip=document.createElement('div');strip.className='hourly-strip';
+  const currentHour=(c.time||'').slice(0,13);
+  let start=hourly.time.findIndex(t=>t.slice(0,13)>=currentHour);
+  if(start<0)start=0;
+  hourly.time.slice(start,start+12).forEach((time,i)=>{
+   const idx=start+i,chip=document.createElement('div');chip.className='hour-chip';
+   const hour=new Date(time+'Z').toLocaleTimeString('en-US',{hour:'numeric',timeZone:'UTC'});
+   const probability=hourly.precipitation_probability?.[idx];
+   chip.innerHTML='<div>'+hour+'</div><div class="hour-icon">'+wd(hourly.weather_code[idx])[1]+'</div><div class="hour-temp">'+formatTemp(hourly.temperature_2m[idx])+'</div><div style="color:#7fc5f4;font-size:10px;margin-top:5px">'+(probability??'—')+'% rain</div>';
+   strip.append(chip);
+  });
+  root.append(strip);$('weather').append(root);
+ }
+ const save=document.createElement('button');save.className='save-location';save.textContent='☆ Save this location';save.onclick=saveCurrent;$('weather').append(save);
 }
 $('units').addEventListener('click',()=>{fahrenheit=!fahrenheit;$('units').textContent=fahrenheit?'°F':'°C';renderWeather()});
 let searchTimer;const search=$('search'),results=$('results');
@@ -252,6 +332,167 @@ search.addEventListener('keydown',e=>{
 });
 document.addEventListener('pointerdown',e=>{if(!e.target.closest('.searchwrap'))results.style.display='none'});
 selectCoords(40.7128,-74.006,{name:'New York City',region:'New York, United States'});
+
+/* Planetary experience */
+const worldCities=[
+ ['New York',40.7128,-74.006],['London',51.5074,-.1278],['Tokyo',35.6762,139.6503],
+ ['Sydney',-33.8688,151.2093],['Paris',48.8566,2.3522],['Dubai',25.2048,55.2708],
+ ['Singapore',1.3521,103.8198],['Cape Town',-33.9249,18.4241],
+ ['Rio',-22.9068,-43.1729],['Los Angeles',34.0522,-118.2437],
+ ['Reykjavík',64.1466,-21.9426],['Mumbai',19.076,72.8777]
+];
+let hotspotsVisible=false,hotspotEntities=[],tourRunning=false,tourTimer=null,tourIndex=0,focusMode=false;
+const tourStops=[
+ ['NEW YORK',40.7128,-74.006,350000],
+ ['ICELAND',64.1466,-21.9426,430000],
+ ['THE ALPS',46.8,9.5,190000],
+ ['DUBAI',25.2048,55.2708,200000],
+ ['TOKYO',35.6762,139.6503,210000],
+ ['THE GREAT BARRIER REEF',-18.2871,147.6992,490000],
+ ['RIO DE JANEIRO',-22.9068,-43.1729,245000],
+ ['CAPE TOWN',-33.9249,18.4241,260000]
+];
+function stopTour(){
+ tourRunning=false;clearTimeout(tourTimer);
+ $('tourBtn').classList.remove('active');$('tourBtn').textContent='✦ World tour';
+}
+function advanceTour(){
+ if(!tourRunning)return;
+ const [name,lat,lon,height]=tourStops[tourIndex%tourStops.length];tourIndex++;
+ $('earthStatus').textContent='✦ Touring '+name;
+ viewer.camera.flyTo({destination:C.Cartesian3.fromDegrees(lon,lat,height),duration:3.2,
+   complete:()=>{if(tourRunning)tourTimer=setTimeout(advanceTour,3400)}});
+}
+$('tourBtn').addEventListener('click',()=>{
+ if(tourRunning){stopTour();return}
+ tourRunning=true;tourIndex=0;$('tourBtn').classList.add('active');$('tourBtn').textContent='■ Stop tour';
+ advanceTour();
+});
+const originalFlyTo=flyTo;
+flyTo=function(lat,lon,height){stopTour();originalFlyTo(lat,lon,height)};
+$('focusBtn').addEventListener('click',()=>{
+ focusMode=!focusMode;
+ $('focusBtn').classList.toggle('active',focusMode);
+ document.querySelector('.panel').style.display=focusMode?'none':'';
+ document.querySelector('.atmos-headline').style.display=focusMode?'none':'';
+ document.querySelector('.system-data').style.display=focusMode?'none':'';
+ document.querySelector('.topbar').style.opacity=focusMode?'.45':'1';
+ $('focusBtn').textContent=focusMode?'◫ Exit focus':'⛶ Focus';
+});
+function getSaved(){try{const a=JSON.parse(localStorage.getItem('atmos-places-v1')||'[]');return Array.isArray(a)?a:[]}catch{return []}}
+function putSaved(a){try{localStorage.setItem('atmos-places-v1',JSON.stringify(a))}catch{showNotice('Browser storage is unavailable')}renderSaved()}
+function saveCurrent(){
+ if(!selected){showNotice('Select a place on Earth first');return}
+ const arr=getSaved();
+ const id=selected.lat.toFixed(4)+','+selected.lon.toFixed(4);
+ if(arr.some(p=>p.id===id)){showNotice('This place is already saved');return}
+ arr.unshift({id,lat:selected.lat,lon:selected.lon,name:$('place').textContent,region:$('region').textContent});
+ putSaved(arr.slice(0,30));showNotice('★ Place saved!');
+}
+function renderSaved(){
+ const root=$('savedList');root.innerHTML='';
+ const arr=getSaved();
+ if(!arr.length){root.textContent='No places saved yet. Click Earth, then choose Save location.';return}
+ for(const p of arr){
+  const row=document.createElement('div');row.className='saved-item';
+  const title=document.createElement('div');title.className='saved-name';
+  const strong=document.createElement('strong');strong.textContent=p.name;
+  const small=document.createElement('small');small.textContent=p.region||prettyCoords(p.lat,p.lon);
+  title.append(strong,small);
+  const go=document.createElement('button');go.textContent='Explore';
+  go.addEventListener('click',()=>{closeSaved();selectCoords(p.lat,p.lon,{name:p.name,region:p.region},true)});
+  const del=document.createElement('button');del.textContent='✕';del.title='Remove saved place';
+  del.addEventListener('click',()=>putSaved(getSaved().filter(x=>x.id!==p.id)));
+  row.append(title,go,del);root.append(row);
+ }
+}
+function closeSaved(){$('favoritesFlyout').classList.remove('open');$('favoritesBtn').classList.remove('active')}
+$('favoritesBtn').addEventListener('click',()=>{
+ const fly=$('favoritesFlyout');const open=fly.classList.toggle('open');
+ $('favoritesBtn').classList.toggle('active',open);if(open)renderSaved();
+});
+$('closeFlyout').addEventListener('click',closeSaved);
+$('saveBtn').addEventListener('click',saveCurrent);
+$('shareBtn').addEventListener('click',async()=>{
+ if(!selected){showNotice('Select a location before sharing');return}
+ const u=new URL(location.href);
+ u.searchParams.set('lat',selected.lat.toFixed(5));
+ u.searchParams.set('lon',selected.lon.toFixed(5));
+ try{await navigator.clipboard.writeText(u.toString());showNotice('Location link copied!')}
+ catch{prompt('Copy this location URL',u.toString())}
+});
+async function toggleHotspots(){
+ if(hotspotsVisible){
+  hotspotsVisible=false;hotspotEntities.forEach(x=>viewer.entities.remove(x));hotspotEntities=[];
+  $('hotspotsBtn').classList.remove('active');$('weatherLayerStatus').textContent='Globe online';return;
+ }
+ hotspotsVisible=true;$('hotspotsBtn').classList.add('active');
+ $('weatherLayerStatus').textContent='Loading world temperatures';
+ const tasks=worldCities.map(async ([name,lat,lon])=>{
+  const u='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,weather_code';
+  const r=await fetch(u);if(!r.ok)throw Error('Weather unavailable');
+  const data=await r.json();return{name,lat,lon,temp:data.current.temperature_2m,code:data.current.weather_code};
+ });
+ const result=await Promise.allSettled(tasks);
+ if(!hotspotsVisible)return;
+ let added=0;
+ result.forEach(x=>{
+  if(x.status!=='fulfilled')return;
+  const p=x.value;
+  const temp=Math.round(fahrenheit?p.temp*9/5+32:p.temp);
+  const c=p.temp<0?'#7fd8ff':p.temp<15?'#a7e9f1':p.temp<27?'#ffe0a1':'#ffab86';
+  const entity=viewer.entities.add({
+   position:C.Cartesian3.fromDegrees(p.lon,p.lat,8000),
+   label:{text:p.name+'  '+temp+'°',font:'bold 15px sans-serif',
+      fillColor:C.Color.fromCssColorString(c),
+      outlineColor:C.Color.fromCssColorString('#03101c'),outlineWidth:4,
+      style:C.LabelStyle.FILL_AND_OUTLINE,
+      showBackground:true,backgroundColor:C.Color.fromCssColorString('#05182bdc'),
+      backgroundPadding:new C.Cartesian2(11,7),
+      pixelOffset:new C.Cartesian2(0,-15),
+      distanceDisplayCondition:new C.DistanceDisplayCondition(0,18000000)},
+   point:{pixelSize:8,color:C.Color.fromCssColorString(c),
+      outlineColor:C.Color.WHITE,outlineWidth:1},
+   properties:{atmosCity:p.name,lat:p.lat,lon:p.lon}
+  });
+  hotspotEntities.push(entity);added++;
+ });
+ $('weatherLayerStatus').textContent=added+' city temperatures';
+ if(!added)showNotice('World temperatures are temporarily unavailable');
+}
+$('hotspotsBtn').addEventListener('click',toggleHotspots);
+const globeClick=handler.getInputAction(C.ScreenSpaceEventType.LEFT_CLICK);
+handler.setInputAction(click=>{
+ const picked=viewer.scene.pick(click.position);
+ if(C.defined(picked)&&picked.id&&picked.id.properties&&picked.id.properties.atmosCity){
+   const props=picked.id.properties;stopTour();
+   const name=props.atmosCity.getValue(),lat=props.lat.getValue(),lon=props.lon.getValue();
+   selectCoords(lat,lon,{name,region:'World weather station'},true);return;
+ }
+ stopTour();globeClick(click);
+},C.ScreenSpaceEventType.LEFT_CLICK);
+function updateTelemetry(){
+ const alt=viewer.camera.positionCartographic.height;
+ $('altReadout').textContent=alt>=1000?(alt/1000).toLocaleString('en-US',{maximumFractionDigits:0})+' km':Math.max(0,alt).toFixed(0)+' m';
+ const c=viewer.camera.pickEllipsoid(new C.Cartesian2(viewer.canvas.clientWidth/2,viewer.canvas.clientHeight/2),viewer.scene.globe.ellipsoid);
+ if(c){const p=C.Cartographic.fromCartesian(c);$('coordsReadout').textContent=C.Math.toDegrees(p.latitude).toFixed(2)+'°, '+C.Math.toDegrees(p.longitude).toFixed(2)+'°'}
+ $('clockReadout').textContent=new Date().toISOString().slice(11,19);
+}
+setInterval(updateTelemetry,1000);updateTelemetry();
+document.addEventListener('keydown',e=>{
+ if(e.target.closest('input,textarea'))return;
+ if(e.key.toLowerCase()==='t')$('tourBtn').click();
+ if(e.key.toLowerCase()==='f')$('focusBtn').click();
+ if(e.key.toLowerCase()==='s')saveCurrent();
+ if(e.key==='Escape'){closeSaved();stopTour()}
+});
+const urlLocation=new URLSearchParams(location.search);
+const linkLat=Number(urlLocation.get('lat')),linkLon=Number(urlLocation.get('lon'));
+if(urlLocation.has('lat')&&urlLocation.has('lon')&&Number.isFinite(linkLat)&&Number.isFinite(linkLon)&&Math.abs(linkLat)<=90&&Math.abs(linkLon)<=180){
+ selectCoords(linkLat,linkLon,null,true);
+}
+renderSaved();
+
 </script>
 </body>
 </html>
